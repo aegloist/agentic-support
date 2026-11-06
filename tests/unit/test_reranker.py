@@ -43,8 +43,12 @@ def _chunk(chunk_id: str, content: str) -> RetrievedChunk:
 async def test_lexical_ranks_overlap() -> None:
     provider = LexicalRerankProvider()
     ranked = await provider.rerank(
-        "return",
-        ["express deliveries take three days", "seven-day change-of-mind return", "invoice information"],
+        "What is the return window for a standard item?",
+        [
+            "Return pickup is available for eligible items; the return page shows dates and fees.",
+            "Standard items may be returned within 30 days. The customer pays return shipping.",
+            "invoice information",
+        ],
         top_n=2,
     )
     assert ranked[0][0] == 1

@@ -9,8 +9,13 @@ from typing import Any
 
 from app.config.settings import Settings
 from app.providers.device import resolve_torch_device
+from app.retrieval.tokenizer import tokenize
 
 logger = logging.getLogger(__name__)
+
+_QUERY_STOP_WORDS = frozenset(
+    "a an the is are do does i we you my what which how when where can of to for in on and or with it be".split()
+)
 
 
 class LexicalRerankProvider:
@@ -25,10 +30,10 @@ class LexicalRerankProvider:
         *,
         top_n: int,
     ) -> list[tuple[int, float]]:
-        query_tokens = set(query.lower())
+        query_tokens = set(tokenize(query)) - _QUERY_STOP_WORDS
         scored: list[tuple[int, float]] = []
         for index, document in enumerate(documents):
-            doc_tokens = set(document.lower())
+            doc_tokens = set(tokenize(document))
             if not query_tokens:
                 score = 0.0
             else:
