@@ -28,7 +28,7 @@ uvicorn app.asgi:app --reload --port 8002
 
 Chat requires a support access token. Generate one with `python -c "import secrets; print(secrets.token_urlsafe(32))"`, then set `AUTH_TOKENS={"u_demo":"YOUR_GENERATED_TOKEN"}` in `.env`. Each unique token identifies one user. Keep it out of Git and frontend build settings. Send it as `Authorization: Bearer ...`; `/api/v1/auth/me` verifies it. To connect the CLI to the API, set `SUPPORT_API_TOKEN` in the CLI process environment. Local CLI mode is a trusted operator process.
 
-The API starts in offline demonstration mode when no model credentials are configured. Offline mode returns source excerpts or verified demo data instead of pretending to generate a full model answer. Configure a supported OpenAI-compatible generation endpoint and English-capable embeddings before evaluating model quality. See [configuration](docs/07-configuration.md).
+The API starts in offline demonstration mode when no model credentials are configured. Offline mode returns source excerpts or verified demo data instead of pretending to generate a full model answer. Set `LLM_API_KEY`, `LLM_BASE_URL`, and `LLM_MODEL` for your chosen OpenAI-compatible generation provider. Its chat endpoint must accept `response_format={"type":"json_object"}`. This transport is verified with mocked responses; run a real smoke test with your key before claiming provider compatibility. Local `BAAI/bge-small-en-v1.5` embeddings remain the default; install `.[rerank]` to load local weights. Without those dependencies the runtime uses test/hash embeddings, reported as `bm25+hash` by `/capabilities`. See [configuration](docs/07-configuration.md).
 
 In another terminal, start the web app:
 

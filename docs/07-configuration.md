@@ -51,9 +51,9 @@ class Settings(BaseSettings):
 
 | Variable | Default | Description |
 |---|---|---|
-| `DEEPSEEK_API_KEY` | empty | empty means Fake LLM |
-| `DEEPSEEK_BASE_URL` | `https://api.deepseek.com` | OpenAI-compatible |
-| `DEEPSEEK_MODEL` | `deepseek-chat` | |
+| `LLM_API_KEY` | empty | empty means Fake LLM |
+| `LLM_BASE_URL` | `https://api.deepseek.com` | OpenAI-compatible |
+| `LLM_MODEL` | `deepseek-chat` | |
 | `LLM_TIMEOUT_SECONDS` | `30` | read timeout |
 | `LLM_MAX_RETRIES` | `3` | retryable errors only |
 | `EMBEDDING_API_KEY` / `BASE_URL` | empty | both must be set to use the remote OpenAI-compatible endpoint |
@@ -115,3 +115,5 @@ Container assembly: `build_container` in `app/services/container.py`.
 ---
 
 Previous chapter [06](06-api-reference.md) · Next chapter [08 · Reliability](08-reliability.md)
+
+The generic `LLM_*` variables take precedence over the legacy `DEEPSEEK_*` names. Keep one set configured. A provider must support the chat-completions endpoint and JSON object responses. No live generation provider has been verified in this checkout. `/capabilities` reports the selected model and whether retrieval is using a hash fallback.

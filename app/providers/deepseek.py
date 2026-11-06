@@ -1,4 +1,4 @@
-"""DeepSeek chat-completion provider."""
+"""OpenAI-compatible chat-completion provider."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class DeepSeekProvider:
-    """OpenAI-compatible DeepSeek chat completions client.
+    """OpenAI-compatible chat client (the default endpoint is DeepSeek).
 
     Timeouts are split so a hung connect does not block a worker forever.
     400/401/403 are not retried.

@@ -3,7 +3,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, SecretStr, field_validator
+from pydantic import AliasChoices, Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,9 +24,18 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     api_v1_prefix: str = "/api/v1"
 
-    deepseek_api_key: SecretStr = SecretStr("")
-    deepseek_base_url: str = "https://api.deepseek.com"
-    deepseek_model: str = "deepseek-chat"
+    deepseek_api_key: SecretStr = Field(
+        default=SecretStr(""),
+        validation_alias=AliasChoices("LLM_API_KEY", "DEEPSEEK_API_KEY", "deepseek_api_key"),
+    )
+    deepseek_base_url: str = Field(
+        default="https://api.deepseek.com",
+        validation_alias=AliasChoices("LLM_BASE_URL", "DEEPSEEK_BASE_URL", "deepseek_base_url"),
+    )
+    deepseek_model: str = Field(
+        default="deepseek-chat",
+        validation_alias=AliasChoices("LLM_MODEL", "DEEPSEEK_MODEL", "deepseek_model"),
+    )
     llm_timeout_seconds: float = 30.0
     llm_max_retries: int = 3
 

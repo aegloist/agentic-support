@@ -34,6 +34,10 @@ class HybridRetriever:
         self._rrf_k = rrf_k
         self._cache = cache
 
+    @property
+    def embedding_backend(self) -> str:
+        return getattr(self._vector.embedder, "backend", "unknown")
+
     async def retrieve(self, query: str, *, top_k: int) -> list[RetrievedChunk]:
         if self._cache is not None:
             cached = await self._cache.get(query, top_k)

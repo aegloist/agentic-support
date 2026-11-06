@@ -79,17 +79,17 @@ async def capabilities(
     reranker_provider = getattr(container.chat_service, "_reranker", None)
     provider = getattr(reranker_provider, "_provider", None)
     reranker = getattr(provider, "backend", "unknown")
-    llm = "deepseek" if container.settings.llm_configured else "offline"
+    llm = (
+        f"compatible:{container.settings.deepseek_model}"
+        if container.settings.llm_configured
+        else "offline"
+    )
     cache = "redis" if container.redis is not None else "memory"
     vector_store_type = type(container.vector_store).__name__ if container.vector_store else "none"
     vector_store = "memory" if vector_store_type == "InMemoryVectorStore" else vector_store_type
-    retriever = (
-        "hybrid"
-        if container.settings.embedding_configured or container.settings.local_embedding_configured
-        else "bm25"
-    )
+    retriever = "bm25+hash" if container.retriever.embedding_backend == "hash" else "hybrid"
     degraded = any(
-        value in {"offline", "memory", "none", "lexical", "bm25"}
+        value in {"offline", "memory", "none", "lexical", "bm25", "bm25+hash"}
         for value in (llm, cache, vector_store, reranker, retriever)
     )
     return CapabilitiesResponse(

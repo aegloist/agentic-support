@@ -134,7 +134,7 @@ async def build_container(settings: Settings, seed: bool = False) -> AppContaine
         "sqlite" if settings.use_sqlite else "postgresql",
         "redis" if redis is not None else "memory",
         type(store).__name__,
-        "deepseek" if settings.llm_configured else "offline",
+        settings.deepseek_model if settings.llm_configured else "offline",
         settings.local_embedding_configured,
         settings.cross_encoder_configured,
     )
