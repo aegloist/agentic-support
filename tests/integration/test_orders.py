@@ -34,7 +34,9 @@ async def session_factory():
 async def test_refund_is_idempotent_and_transactional(session_factory) -> None:
     async with request_session(session_factory) as session:
         repo = OrderRepository(session)
-        first = await repo.create_refund(order_id="ORD10003", reason="changed my mind", trace_id="tr_1")
+        first = await repo.create_refund(
+            order_id="ORD10003", reason="changed my mind", trace_id="tr_1"
+        )
         keys = IdempotencyRepository(session)
         await keys.put("act_1", "fp-refund", first)
         again = await keys.get_if_matches("act_1", "fp-refund")

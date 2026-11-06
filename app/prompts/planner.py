@@ -1,4 +1,5 @@
 """English tool planning prompt."""
+
 PLANNER_SYSTEM = """Plan the fewest steps needed for this support request. Return JSON only. Available tools: {tools}
 Current skill: {skill_context}
 Use at most six steps. Follow the skill's tool order. Place every write or destructive tool in a separate proposed step; execution requires explicit customer confirmation. Never guess an order number. Set needs_retrieval=true for policy questions.

@@ -14,9 +14,7 @@ from app.retrieval.self_rag import SelfRAGLoop
 from app.schemas.retrieval import RetrievedChunk
 
 _SUFFICIENT = '{"relevant": true, "sufficient": true, "missing_aspect": "", "rationale": "ok"}'
-_NOT_SUFFICIENT = (
-    '{"relevant": true, "sufficient": false, "missing_aspect": "compensation", "rationale": "partial"}'
-)
+_NOT_SUFFICIENT = '{"relevant": true, "sufficient": false, "missing_aspect": "compensation", "rationale": "partial"}'
 
 
 def _chunk(chunk_id: str, content: str = "policy body text") -> RetrievedChunk:

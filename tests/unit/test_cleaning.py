@@ -68,7 +68,10 @@ def test_collapses_inline_space_and_extra_blank_lines() -> None:
 
 def test_markdown_keeps_policy_pii_words_and_numbers(tmp_path: Path) -> None:
     path = tmp_path / "privacy_cs.md"
-    path.write_text("Agents must never request a full ID card number. The contact example 13812345678 must not be repeated.\n", encoding="utf-8")
+    path.write_text(
+        "Agents must never request a full ID card number. The contact example 13812345678 must not be repeated.\n",
+        encoding="utf-8",
+    )
     chunks = parse_path(
         path,
         document_id="privacy",
@@ -116,8 +119,12 @@ def test_utf8_sig_markdown_reads_bom(tmp_path: Path) -> None:
 
 
 def test_exact_duplicate_keeps_first_chunk_id() -> None:
-    first = _chunk("a_00", "doc_a", "Custom items are not covered by the 7-day no-questions-asked return.")
-    second = _chunk("b_00", "doc_b", "Custom items are not covered by the 7-day no-questions-asked return.")
+    first = _chunk(
+        "a_00", "doc_a", "Custom items are not covered by the 7-day no-questions-asked return."
+    )
+    second = _chunk(
+        "b_00", "doc_b", "Custom items are not covered by the 7-day no-questions-asked return."
+    )
     kept = dedupe_chunks([first, second])
     assert [chunk.chunk_id for chunk in kept] == ["a_00"]
 

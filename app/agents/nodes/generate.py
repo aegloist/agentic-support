@@ -35,7 +35,10 @@ async def generate_node(state: AgentState, llm: LLMProvider) -> dict:
         }
     pending = state.get("pending_action")
     if (state.get("extra") or {}).get("missing_order_id"):
-        return {"final_answer": "Please provide the order number before I can continue.", "citations": []}
+        return {
+            "final_answer": "Please provide the order number before I can continue.",
+            "citations": [],
+        }
     if pending:
         answer = pending.summary
         latency = state.get("latency") or LatencyBreakdown()
@@ -47,9 +50,12 @@ async def generate_node(state: AgentState, llm: LLMProvider) -> dict:
             "latency": latency,
         }
     evidence = (
-        "\n\n".join(f"[{c.chunk_id}] {c.title}\n{c.content}" for c in chunks[:6]) or "(no retrieved evidence)"
+        "\n\n".join(f"[{c.chunk_id}] {c.title}\n{c.content}" for c in chunks[:6])
+        or "(no retrieved evidence)"
     )
-    tool_text = json.dumps([t.model_dump() for t in tools], ensure_ascii=False) if tools else "(none)"
+    tool_text = (
+        json.dumps([t.model_dump() for t in tools], ensure_ascii=False) if tools else "(none)"
+    )
     intent = state.get("intent")
     strategy = state.get("strategy") or RetrievalStrategy.DIRECT
     if isinstance(llm, OfflineLLMProvider):
@@ -142,8 +148,12 @@ def _offline_answer(state: AgentState) -> tuple[str, set[str]]:
     if state.get("strategy") == RetrievalStrategy.DIRECT:
         return "Hello! I can help with store policies, orders, shipping, and returns.", set()
     statuses = {
-        "created": "awaiting payment", "paid": "paid", "shipped": "shipped",
-        "delivered": "delivered", "cancelled": "cancelled", "refunding": "refund pending",
+        "created": "awaiting payment",
+        "paid": "paid",
+        "shipped": "shipped",
+        "delivered": "delivered",
+        "cancelled": "cancelled",
+        "refunding": "refund pending",
         "refunded": "refunded",
     }
     for result in reversed(state.get("tool_results") or []):
@@ -154,17 +164,31 @@ def _offline_answer(state: AgentState) -> tuple[str, set[str]]:
         if result.name == "cancel_order":
             return f"Order {order_id} was cancelled.", set()
         if result.name == "create_refund_request":
-            return f"A refund request was submitted for order {order_id}. The funds have not necessarily arrived yet.", set()
+            return (
+                f"A refund request was submitted for order {order_id}. The funds have not necessarily arrived yet.",
+                set(),
+            )
         if result.name == "create_return_request":
-            return f"A return request was submitted for order {order_id}. This does not mean a refund is complete.", set()
+            return (
+                f"A return request was submitted for order {order_id}. This does not mean a refund is complete.",
+                set(),
+            )
         if result.name == "get_order":
             status = statuses.get(str(data.get("status")), "unknown")
             return f"Order {order_id} is currently {status}.", set()
         if result.name == "track_shipment":
             events = data.get("events") or []
             latest = events[-1] if events else None
-            labels = {"warehouse": "being prepared", "in_transit": "in transit", "delivered": "delivered"}
-            status = labels.get(str(latest.get("status")), "unknown") if isinstance(latest, dict) else "no tracking events yet"
+            labels = {
+                "warehouse": "being prepared",
+                "in_transit": "in transit",
+                "delivered": "delivered",
+            }
+            status = (
+                labels.get(str(latest.get("status")), "unknown")
+                if isinstance(latest, dict)
+                else "no tracking events yet"
+            )
             return f"The latest shipping status for order {order_id} is {status}.", set()
         if result.name == "get_refund_status":
             refunds = data.get("refunds") or []
@@ -172,14 +196,26 @@ def _offline_answer(state: AgentState) -> tuple[str, set[str]]:
                 return "There is no refund request on file for this order.", set()
             first = refunds[0]
             if isinstance(first, dict):
-                return f"Refund {first.get('refund_id', '')} is currently {first.get('status', 'unknown')}.", set()
+                return (
+                    f"Refund {first.get('refund_id', '')} is currently {first.get('status', 'unknown')}.",
+                    set(),
+                )
         if result.name == "search_knowledge":
             found = data.get("chunks") or []
             if found and isinstance(found[0], dict):
                 item = found[0]
-                return f"No answer model is configured. Here is an excerpt from {item.get('title') or 'the policy'}:\n\n> {str(item.get('content') or '').strip()[:260]}", set()
+                return (
+                    f"No answer model is configured. Here is an excerpt from {item.get('title') or 'the policy'}:\n\n> {str(item.get('content') or '').strip()[:260]}",
+                    set(),
+                )
     chunks = state.get("retrieved_chunks") or []
     if chunks:
         chunk = chunks[0]
-        return f"No answer model is configured. Here is an excerpt from {chunk.title}:\n\n> {chunk.content.strip()[:260]}", {chunk.chunk_id}
-    return "I cannot answer reliably yet. Please share more details or contact a human agent.", set()
+        return (
+            f"No answer model is configured. Here is an excerpt from {chunk.title}:\n\n> {chunk.content.strip()[:260]}",
+            {chunk.chunk_id},
+        )
+    return (
+        "I cannot answer reliably yet. Please share more details or contact a human agent.",
+        set(),
+    )

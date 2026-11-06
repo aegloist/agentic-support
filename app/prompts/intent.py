@@ -1,4 +1,5 @@
 """English customer intent classification prompt."""
+
 PROMPT_VERSION = "intent_v4_en"
 _LABELS = "greeting, chitchat, faq_policy, order_inquiry, logistics, refund, return_exchange, cancel_order, product_consult, recommendation, coupon, complaint, human_handoff, out_of_scope"
 INTENT_SYSTEM_V1 = f"Classify the message using one label: {_LABELS}. Return JSON only."

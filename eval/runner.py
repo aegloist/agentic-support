@@ -321,7 +321,8 @@ async def eval_generation() -> dict:
         async with semaphore:
             chunks = await retriever.retrieve(row["query"], top_k=5)
             evidence = (
-                "\n\n".join(f"[{c.chunk_id}] {c.content}" for c in chunks[:6]) or "(no retrieved results)"
+                "\n\n".join(f"[{c.chunk_id}] {c.content}" for c in chunks[:6])
+                or "(no retrieved results)"
             )
             naive = await _generate_answer(llm, row["query"], "(no retrieved results)")
             rag = await _generate_answer(llm, row["query"], evidence)
@@ -441,7 +442,11 @@ async def eval_e2e() -> dict:
                     keyword_ok += 1
             if any(token in row["query"] for token in ("ORD", "inventory", "cancel")):
                 toolish_n += 1
-                if "ORD" in response.answer or response.pending_action or "inventory" in response.answer:
+                if (
+                    "ORD" in response.answer
+                    or response.pending_action
+                    or "inventory" in response.answer
+                ):
                     toolish_ok += 1
             details.append(
                 {
@@ -488,7 +493,9 @@ def _resume_bullets(report: dict) -> list[str]:
         extra = f"; rules {intent_rules['accuracy']:.1%}" if intent_rules else ""
         if overlay:
             extra += f"; overlay only {overlay['accuracy']:.1%}"
-        bullets.append(f"Intent classification: {intent_v3['n']} cases " + " -> ".join(parts) + extra)
+        bullets.append(
+            f"Intent classification: {intent_v3['n']} cases " + " -> ".join(parts) + extra
+        )
     retrieval = report.get("retrieval")
     if retrieval:
         bm25 = next((s for s in retrieval["systems"] if s["backend"] == "bm25"), None)

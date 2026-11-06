@@ -1,4 +1,5 @@
 """Faithfulness grading and correction prompts."""
+
 FAITHFULNESS_SYSTEM = "Check whether every factual claim in the support answer is supported by supplied evidence or tool results. Return JSON only. `supported` is a boolean and `hallucinated_spans` lists unsupported phrases."
 FAITHFULNESS_USER = """Question: {query}
 Answer: {answer}

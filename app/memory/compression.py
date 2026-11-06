@@ -59,7 +59,9 @@ def apply_compression(
     if level in {CompressionLevel.HARD_COMPRESS, CompressionLevel.AUTO_COMPACT}:
         window = sliding_window(messages)
         if summary:
-            window = [ChatMessage(role="system", content=f"Conversation summary: {summary}")] + window
+            window = [
+                ChatMessage(role="system", content=f"Conversation summary: {summary}")
+            ] + window
         return window, tools, level, summary
     if level == CompressionLevel.SOFT_TRUNCATE:
         return messages, tools, level, summary

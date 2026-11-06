@@ -262,8 +262,13 @@ def test_resume_bullets_cover_every_section() -> None:
     assert any("dense-hash Precision@1 55.0%, Recall@3 75.0%" in b for b in bullets)
     assert any("hybrid+rrf Precision@1 60.0%, Recall@3 80.0%" in b for b in bullets)
     assert any("Hybrid+Cross-Encoder Precision@1 70.0%, Recall@3 85.0%" in b for b in bullets)
-    assert any("Faithfulness: no context 40% -> RAG 70% -> RAG+self-check 90%" in b for b in bullets)
-    assert any("Hallucination rate: no context 50% -> RAG+self-check 10%, relative reduction 80%" in b for b in bullets)
+    assert any(
+        "Faithfulness: no context 40% -> RAG 70% -> RAG+self-check 90%" in b for b in bullets
+    )
+    assert any(
+        "Hallucination rate: no context 50% -> RAG+self-check 10%, relative reduction 80%" in b
+        for b in bullets
+    )
     assert any("E2E 16 cases: P50 900ms / P95 2100ms" in b for b in bullets)
 
 

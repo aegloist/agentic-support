@@ -19,7 +19,9 @@ from app.retrieval.cache import (
 from app.schemas.retrieval import RetrievedChunk
 
 
-def _chunk(chunk_id: str = "c1", content: str = "30-day change-of-mind returns apply.") -> RetrievedChunk:
+def _chunk(
+    chunk_id: str = "c1", content: str = "30-day change-of-mind returns apply."
+) -> RetrievedChunk:
     return RetrievedChunk(
         chunk_id=chunk_id,
         document_id="return_policy_0",

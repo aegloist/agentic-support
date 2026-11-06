@@ -42,7 +42,11 @@ def test_title_becomes_section_and_table_stays_whole() -> None:
     elements = [
         _FakeElement("Header", "Company letterhead"),
         _FakeElement("Title", "Return Policy", page_number=1),
-        _FakeElement("NarrativeText", "Custom items are excluded from the 7-day no-questions-asked return.", page_number=1),
+        _FakeElement(
+            "NarrativeText",
+            "Custom items are excluded from the 7-day no-questions-asked return.",
+            page_number=1,
+        ),
         _FakeElement(
             "Table",
             "Scenario Shipping fee\nNo-questions-asked Paid by buyer",
@@ -131,7 +135,10 @@ def test_parse_path_uses_injected_partition(tmp_path: Path) -> None:
     def fake_partition(_path: Path) -> list[_FakeElement]:
         return [
             _FakeElement("Title", "Returns"),
-            _FakeElement("NarrativeText", "Custom items are excluded from the 7-day no-questions-asked return."),
+            _FakeElement(
+                "NarrativeText",
+                "Custom items are excluded from the 7-day no-questions-asked return.",
+            ),
         ]
 
     chunks = parse_path(
@@ -162,7 +169,10 @@ def test_parse_path_skips_non_markdown_without_unstructured(tmp_path: Path) -> N
 
 def test_parse_path_falls_back_to_markdown(tmp_path: Path) -> None:
     path = tmp_path / "return_policy.md"
-    path.write_text("## Returns\n\nCustom items are excluded from the 7-day no-questions-asked return.\n", encoding="utf-8")
+    path.write_text(
+        "## Returns\n\nCustom items are excluded from the 7-day no-questions-asked return.\n",
+        encoding="utf-8",
+    )
     chunks = parse_path(
         path,
         document_id="doc",
@@ -200,7 +210,10 @@ def test_html_fixture_with_injected_partition() -> None:
     def fake_partition(_path: Path) -> list[_FakeElement]:
         return [
             _FakeElement("Title", "Return Policy"),
-            _FakeElement("NarrativeText", "Custom items are excluded from the 7-day no-questions-asked return."),
+            _FakeElement(
+                "NarrativeText",
+                "Custom items are excluded from the 7-day no-questions-asked return.",
+            ),
             _FakeElement(
                 "Table",
                 "Scenario Shipping fee No-questions-asked Paid by buyer",

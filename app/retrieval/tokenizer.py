@@ -6,6 +6,7 @@ import re
 
 _WORD = re.compile(r"[a-z0-9]+(?:['-][a-z0-9]+)*", re.IGNORECASE)
 
+
 def tokenize(text: str) -> list[str]:
     """Normalize text and retain English words, contractions, and identifiers."""
 

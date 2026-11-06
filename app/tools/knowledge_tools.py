@@ -77,8 +77,14 @@ class GetCouponTool(Tool):
             success=True,
             output={
                 "coupons": [
-                    {"code": "NEW10", "desc": "$10 off orders of $99 or more; cannot be combined with category coupons"},
-                    {"code": "SHIP0", "desc": "Free standard shipping on eligible orders; remote-area surcharges may apply"},
+                    {
+                        "code": "NEW10",
+                        "desc": "$10 off orders of $99 or more; cannot be combined with category coupons",
+                    },
+                    {
+                        "code": "SHIP0",
+                        "desc": "Free standard shipping on eligible orders; remote-area surcharges may apply",
+                    },
                 ]
             },
         )
