@@ -77,6 +77,8 @@ Inherited Chinese benchmark results are not results for this English adaptation 
 
 Run checks with `pytest -q` and `cd frontend && npm test && npm run build`.
 
+See [local verification](docs/verification.md) for the checked API workflow, test results, and remaining live-model and browser-verification gaps.
+
 ## Security and deployment limits
 
 The private demo verifies bearer tokens against a server-configured user map and ignores caller-provided user IDs. Token issuance and revocation are operator-managed; this is not a public registration system. Local browser history and demonstration orders remain local. Conversation reads and writes are scoped to that authenticated user, including streaming requests. Do not put credentials in source control. Review [security](docs/09-security.md) and [deployment](docs/11-deployment.md).
