@@ -8,7 +8,9 @@ from app.main import create_app
 
 def _client() -> TestClient:
     clear_settings_cache()
-    return TestClient(create_app())
+    return TestClient(
+        create_app(), headers={"Authorization": "Bearer demo-test-token-000000000000000000000"}
+    )
 
 
 def test_health_and_chat_greeting() -> None:

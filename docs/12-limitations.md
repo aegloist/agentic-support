@@ -22,7 +22,7 @@
 | Text cleaning | Post-chunking NFKC / whitespace / hard line breaks; exact dedup; near-duplicates are only logged. No embedding clustering, no Chinese numeral rewriting. "seven days" stays "seven days" | `app/retrieval/cleaning.py` |
 | Knowledge base PII | Only non-`.md` documents go through `mask_pii` before ingest; policy Markdown and log masking are handled separately | `app/core/security.py` |
 | Multi-tenancy | None; string `user_id` isolation | `OrderRepository.get_visible_order` |
-| Authentication | The API accepts the request-body `user_id` directly, identity is unverified; production needs a trusted gateway to bind user identity | `app/api/routes/chat.py` |
+| Authentication | Private-demo bearer tokens map to server-side user IDs; public registration and identity-provider integration are not implemented | `app/api/routes/chat.py` |
 | Demo data | Not written automatically at startup; run `python -m scripts.seed_demo` explicitly, repeatable | `scripts/seed_demo.py` |
 | Startup migrations | `create_all`; Alembic versions exist but are not run by default | `alembic/versions/` |
 

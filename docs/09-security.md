@@ -13,6 +13,10 @@
 
 Covers: `app/guardrails/`, `app/tools/permissions.py`, `app/config/settings.py`.
 
+## Authentication
+
+Chat and `/auth/me` require a bearer token from the server's `AUTH_TOKENS` map. A token maps to a single user ID; request-body identities are ignored. Missing or invalid tokens return 401. An empty map disables chat. Tokens must be unique and at least 32 characters long; use `secrets.token_urlsafe(32)` to generate them. Only send tokens over HTTPS outside local development. Keep tokens out of `VITE_*`, source files, and logs. Operators revoke access by removing the token from the map and restarting the service.
+
 ## Secrets
 
 - `.env` is gitignored; the image does not COPY `.env`

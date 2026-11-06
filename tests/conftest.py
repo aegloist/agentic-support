@@ -12,6 +12,9 @@ os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///./data/local/test.db"
 os.environ["REDIS_URL"] = ""
 os.environ["QDRANT_URL"] = ""
 os.environ["LOG_LEVEL"] = "WARNING"
+os.environ["AUTH_TOKENS"] = (
+    '{"u_demo":"demo-test-token-000000000000000000000", "other":"other-test-token-00000000000000000000"}'
+)
 
 from pathlib import Path
 

@@ -2,7 +2,7 @@
 
 An English-language e-commerce support assistant built with FastAPI, LangGraph, hybrid search, and a React chat workspace. Customers can ask about store policies, look up demo orders, and request supported actions with explicit confirmation.
 
-This repository contains an adapted and extended project. The current English policy corpus and evaluation set are demonstration material. Model quality, real payment, carrier integrations, and production authentication have not been verified.
+This repository contains an adapted and extended project. The current English policy corpus and evaluation set are demonstration material. Live model quality, payment and carrier integrations, and production deployment have not been verified.
 
 ## What it does
 
@@ -22,8 +22,11 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env
+# Configure AUTH_TOKENS in .env before using chat (instructions below).
 uvicorn app.asgi:app --reload --port 8002
 ```
+
+Chat requires a support access token. Generate one with `python -c "import secrets; print(secrets.token_urlsafe(32))"`, then set `AUTH_TOKENS={"u_demo":"YOUR_GENERATED_TOKEN"}` in `.env`. Each unique token identifies one user. Keep it out of Git and frontend build settings. Send it as `Authorization: Bearer ...`; `/api/v1/auth/me` verifies it. To connect the CLI to the API, set `SUPPORT_API_TOKEN` in the CLI process environment. Local CLI mode is a trusted operator process.
 
 The API starts in offline demonstration mode when no model credentials are configured. Offline mode returns source excerpts or verified demo data instead of pretending to generate a full model answer. Configure a supported OpenAI-compatible generation endpoint and English-capable embeddings before evaluating model quality. See [configuration](docs/07-configuration.md).
 
@@ -42,6 +45,7 @@ Open `http://127.0.0.1:5173`. The development server proxies API requests to the
 ```bash
 curl -s http://127.0.0.1:8002/api/v1/chat \
   -H 'content-type: application/json' \
+  -H "Authorization: Bearer $SUPPORT_API_TOKEN" \
   -d '{"message":"Can I return a custom mug that arrived damaged?","user_id":"u_demo"}'
 ```
 
@@ -75,7 +79,7 @@ Run checks with `pytest -q` and `cd frontend && npm test && npm run build`.
 
 ## Security and deployment limits
 
-The demo API accepts a caller-provided `user_id`, stores local browser history in `localStorage`, and uses local demonstration orders. Do not expose it to untrusted users until authentication is verified and every conversation and order lookup is bound to the authenticated owner. Do not put credentials in source control. Review [security](docs/09-security.md) and [deployment](docs/11-deployment.md).
+The private demo verifies bearer tokens against a server-configured user map and ignores caller-provided user IDs. Token issuance and revocation are operator-managed; this is not a public registration system. Local browser history and demonstration orders remain local. Conversation ownership isolation is tracked separately from authentication. Do not put credentials in source control. Review [security](docs/09-security.md) and [deployment](docs/11-deployment.md).
 
 ## Project structure
 

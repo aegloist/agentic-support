@@ -3,7 +3,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import SecretStr
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -70,6 +70,7 @@ class Settings(BaseSettings):
     db_max_overflow: int = 10
     db_pool_timeout: int = 30
     admin_api_token: SecretStr = SecretStr("")
+    auth_tokens: dict[str, SecretStr] = Field(default_factory=dict)
     knowledge_dir: str = "knowledge"
     unstructured_enabled: bool = True
     unstructured_strategy: str = "auto"
@@ -77,6 +78,20 @@ class Settings(BaseSettings):
     unstructured_force: bool = False
     mcp_enabled: bool = True
     mcp_remote_url: str = ""
+
+    @field_validator("auth_tokens")
+    @classmethod
+    def validate_auth_tokens(cls, tokens: dict[str, SecretStr]) -> dict[str, SecretStr]:
+        values = [token.get_secret_value() for token in tokens.values()]
+        if any(not user.strip() or len(user) > 64 for user in tokens):
+            raise ValueError("AUTH_TOKENS user IDs must contain 1–64 characters")
+        if any(len(value) < 32 or value != value.strip() for value in values):
+            raise ValueError(
+                "AUTH_TOKENS values must contain at least 32 characters without surrounding spaces"
+            )
+        if len(set(values)) != len(values):
+            raise ValueError("Each AUTH_TOKENS value must identify exactly one user")
+        return tokens
 
     @property
     def llm_configured(self) -> bool:

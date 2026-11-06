@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 from collections.abc import AsyncIterator
 from typing import TYPE_CHECKING, Any
 
@@ -56,7 +57,11 @@ class ChatCli:
     async def setup(self) -> str:
         """Connect to a running API, or start the engine in-process, and return a banner."""
         if not self._force_local and await self._api_up():
-            self._http = httpx.AsyncClient(timeout=self._timeout)
+            token = os.environ.get("SUPPORT_API_TOKEN", "")
+            self._http = httpx.AsyncClient(
+                timeout=self._timeout,
+                headers={"Authorization": f"Bearer {token}"} if token else {},
+            )
             return f"Connected to {self._base}. Keep asking in this terminal; /quit to exit."
         print("Starting the engine in this process (first model load is slow)...")
         from app.config.settings import get_settings
