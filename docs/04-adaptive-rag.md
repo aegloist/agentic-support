@@ -166,19 +166,7 @@ Queries containing order IDs or "order": **do not cache** (state changes). Imple
 
 ## Evaluation Methodology
 
-> Historical results notice: the figures below were measured on the prior Chinese corpus with `bge-small-zh-v1.5` on 2026-08-22. They do not measure this English adaptation. Current English evaluation status is recorded in [`eval/MEASURED.md`](../eval/MEASURED.md).
-
-
-65 items / with `bge-small-zh-v1.5` + Cross-Encoder loaded / report `all_20260822T121308Z.json` (not distributed with the repo):
-
-| System | Precision@1 | Recall@3 | MRR |
-|---|---|---|---|
-| BM25 | 76.9% | 90% | 0.84 |
-| bge-small only | 83.1% | 94.6% | 0.89 |
-| BM25 + small + RRF | 83.1% | 94.6% | 0.89 |
-| Hybrid + Cross-Encoder | **89.2%** | **97.7%** | **0.94** |
-
-The full table and what can and cannot be claimed is in [10](10-evaluation.md). The pipeline from ingest to reranking is in [15](15-ingest-and-retrieval.md).
+No model-quality result is published yet. Record the current corpus, dataset, model configuration, and raw run output before reporting scores. See [evaluation status](../eval/MEASURED.md).
 
 ---
 

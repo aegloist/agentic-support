@@ -73,7 +73,7 @@ See [architecture](docs/03-architecture.md), [retrieval](docs/15-ingest-and-retr
 
 ## Evaluation
 
-Inherited Chinese benchmark results are not results for this English adaptation and are not claimed here. The English end-to-end set is a starter regression set, not a measured quality report. See [evaluation status and method](eval/MEASURED.md) and [evaluation guide](docs/10-evaluation.md).
+The evaluation datasets provide regression cases for support questions. Model-quality evaluation has not been run yet. See [evaluation status and method](eval/MEASURED.md) and [evaluation guide](docs/10-evaluation.md).
 
 Run checks with `pytest -q` and `cd frontend && npm test && npm run build`.
 

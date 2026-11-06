@@ -20,7 +20,7 @@ BM25 finds exact terms and product identifiers. Dense embeddings find semantical
 
 The relevant files are `app/retrieval/bm25.py`, `vector.py`, `fusion.py`, `hybrid.py`, and `reranker.py`.
 
-The English corpus and English embedding configuration are new to this adaptation. The inherited Chinese benchmark scores do not measure them; no English retrieval-quality result is published yet.
+No retrieval-quality result is published yet. Evaluate the current corpus and embedding configuration before reporting scores.
 
 ## 4. What does multi-hop retrieval add?
 

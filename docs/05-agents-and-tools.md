@@ -25,7 +25,7 @@ Intent, routing, retrieval, planning, execution, generation, faithfulness, and c
 
 Production path: DeepSeek outputs JSON → `intent_v3` prompt → a **high-confidence overlay** corrects confusable labels. If the LLM is down, fall back to keyword rules, then the same overlay.
 
-In 100 real tests: rules 51% → without the overlay v1/v2 about 85%/86% → **v3+overlay 100%** (≥97%).
+Classification quality must be measured on the current intent dataset; no accuracy result is published yet.
 
 ### Code Summary
 
@@ -53,7 +53,7 @@ Evaluation can disable the overlay: `IntentClassifier(..., apply_overlay=False)`
 
 ### Why
 
-In Chinese-language customer service, "please have a human review this refund" (please have a human review this refund) gets mislabeled by the model as `refund` when the gold label is `human_handoff`. The overlay is a stable phrase rule, not hard-coded by `i070`. In interviews, proactively state that the accuracy figure includes the overlay layer.
+A request such as "please have a human review this refund" requires human handoff even though it mentions a refund. The overlay prioritizes explicit support phrases; evaluate classification with and without the overlay to measure its contribution.
 
 ## On-Demand Skill Loading
 
@@ -204,13 +204,13 @@ corrected = await self_correct_answer(query, chunks, result)
 return {"final_answer": corrected}
 ```
 
-On the 65-item eval, hallucinations drop from 1.5% → 0%.
+Measure evidence support and correction behavior with the current generation dataset before claiming a reduction in unsupported answers.
 
 ## Memory Compression
 
 ### Key Points
 
-Token budget `TOKEN_BUDGET=128000` (heuristic, roughly 1.5 Chinese characters per token, **not** an official tokenizer count).
+Token budget `TOKEN_BUDGET=128000` uses a character-count heuristic, not an official provider tokenizer.
 
 | Utilization | Level | Behavior |
 |---|---|---|

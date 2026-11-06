@@ -1,7 +1,5 @@
 # Chapter 2 · How knowledge becomes a verifiable answer
 
-> Historical benchmark note: the Chinese-corpus metrics in this chapter are from the earlier version and do not measure the current English adaptation. See `eval/MEASURED.md`.
-
 "Can a custom item be returned under the seven-day no-questions-asked policy?" looks like a question that only needs one sentence found in a policy document, but it actually contains four consecutive judgments: was the document parsed correctly, were exception conditions preserved through chunking, did retrieval find the relevant evidence, and did the model interpret the evidence as a promise beyond the original text? The quality of RAG depends on the weakest link in this chain.
 
 This chapter starts from the files in `knowledge/` and traces how the answer takes shape along offline indexing, online recall, reranking, multi-hop, and generation checks. Rather than listing algorithm names, ask which specific failure each one solves.
@@ -28,18 +26,11 @@ For single-hop policy questions, the [`retrieval_node`](../../app/agents/nodes/r
 
 [`HybridRetriever`](../../app/retrieval/hybrid.py) uses BM25 and vector retrieval at the same time. BM25 is sensitive to exact words in policies — model numbers and rule names; the vector path covers synonyms and semantically close phrasings. The score scales of the two paths differ, so [`fusion.py`](../../app/retrieval/fusion.py) merges rankings with RRF instead of adding raw scores. If one path fails, the other can still return results; only when both paths return nothing does the retrieval fail.
 
-Recall is responsible for "don't miss"; reranking is responsible for "put the most suitable first". [`reranker.py`](../../app/retrieval/reranker.py) can load a local Cross-Encoder to rescore candidates. Historical measurements used `BAAI/bge-reranker-base`, not Cohere; the degradation score when weights are not loaded must not be reported as a Cross-Encoder result.
+Recall is responsible for "don't miss"; reranking is responsible for "put the most suitable first". [`reranker.py`](../../app/retrieval/reranker.py) can load a local Cross-Encoder to rescore candidates. The configured local reranker defaults to `BAAI/bge-reranker-base`; lexical fallback results must be reported separately from Cross-Encoder results.
 
-The 65 historical retrieval samples provide an interesting counterexample: BM25 alone scored P@1 **76.9%**, bge-small alone **83.1%**, while two-path RRF reached **83.1%** and Hybrid plus Cross-Encoder reached **89.2%**. The [measured records](../../eval/MEASURED.md) show that this round of gains came mainly from reranking; you cannot attribute all improvement to fusion just because the system uses RRF.
+Compare BM25, dense retrieval, fusion, and reranking on the same questions to measure each stage's contribution. Hybrid retrieval does not guarantee a quality improvement.
 
-| Historical offline stage | Result | What it can tell you |
-|---|---:|---|
-| BM25 | P@1 76.9%, R@3 90.0% | Sparse baseline |
-| bge-small only | P@1 83.1%, R@3 94.6% | The dense path is stronger on this set |
-| Hybrid + CE | P@1 89.2%, R@3 97.7% | The final retrieval path after fusion and reranking |
-| RAG generation | Faithfulness 96.9% | Generation quality judged by the same model as referee, not a production guarantee |
-
-Data source: [eval/MEASURED.md](../../eval/MEASURED.md). After changing the knowledge base, chunking, or gold labels, you must rerun the evaluation; old numbers should not be automatically inherited.
+See [evaluation status](../../eval/MEASURED.md). Quality scores require a run against the current corpus and configuration.
 
 ## 2.4 The fourth boundary: finding a document does not mean the answer is grounded
 
@@ -51,21 +42,14 @@ On the streaming path, model tokens may reach the frontend before the faithfulne
 
 ## 2.5 How to read retrieval metrics
 
-P@1 asks "is the top-ranked evidence relevant", R@3 asks "did relevant evidence make the top three", and generation Faithfulness asks "can the answer be derived from the evidence". The three are not interchangeable. Historical reports use document stems for gold labels, the generation evaluation uses the same model as judge, and the E2E set has only 16 items; all of these constrain how far the numbers can be interpreted.
+P@1 asks "is the top-ranked evidence relevant", R@3 asks "did relevant evidence make the top three", and generation Faithfulness asks "can the answer be derived from the evidence". The three are not interchangeable. The runner compares document stems with gold labels, and generation evaluation can use the generator as judge. These choices and the small end-to-end dataset limit how far a measured result can be generalized.
 
-| Historical offline stage | Result | What it can tell you |
-|---|---:|---|
-| BM25 | P@1 76.9%, R@3 90.0% | Sparse baseline |
-| bge-small only | P@1 83.1%, R@3 94.6% | The dense path is stronger on this set |
-| Hybrid + CE | P@1 89.2%, R@3 97.7% | The final retrieval path after fusion and reranking |
-| RAG generation | Faithfulness 96.9% | Generation quality under a same-model judge, not a production guarantee |
-
-Data source: [eval/MEASURED.md](../../eval/MEASURED.md). After changing the knowledge base, chunking, or gold labels, rerun the evaluation; old numbers should not be automatically inherited.
+See [evaluation status](../../eval/MEASURED.md). Quality scores require a run against the current corpus and configuration.
 
 ## Chapter summary
 
 - Offline stages decide evidence granularity; online stages decide which evidence enters the context.
-- Hybrid is a recall strategy, RRF is a fusion method, and the Cross-Encoder is candidate reranking; explain this round of data by each one's contribution.
+- Hybrid is a recall strategy, RRF is a fusion method, and the Cross-Encoder is candidate reranking; measure each stage's contribution separately.
 - Multi-hop only serves questions that need extra evidence, and is bounded by the hop limit.
 - Citations and faithfulness checks improve verifiability, but cannot turn model judgment into an absolute guarantee.
 

@@ -19,7 +19,7 @@
 | Orders / logistics | Seed data + repositories, no carriers | `app/services/seed.py` |
 | Knowledge base updates | Full ingest at startup, no delete API | `app/retrieval/ingest.py` |
 | Document parsing | Production uses Unstructured (PDF/Office/HTML/images); degrades to Markdown heading chunking when deps are missing or under testing. OCR / complex tables are not guaranteed | `app/retrieval/unstructured_parser.py` |
-| Text cleaning | Post-chunking NFKC / whitespace / hard line breaks; exact dedup; near-duplicates are only logged. No embedding clustering, no Chinese numeral rewriting. "seven days" stays "seven days" | `app/retrieval/cleaning.py` |
+| Text cleaning | Post-chunking NFKC / whitespace / hard line breaks; exact dedup; near-duplicates are only logged. No embedding clustering, no numeral rewriting. "seven days" stays "seven days" | `app/retrieval/cleaning.py` |
 | Knowledge base PII | Only non-`.md` documents go through `mask_pii` before ingest; policy Markdown and log masking are handled separately | `app/core/security.py` |
 | User isolation | Verified access tokens bind user IDs; conversations and orders check ownership | `SessionRepository`, `OrderRepository.get_visible_order` |
 | Authentication | Private-demo bearer tokens map to server-side user IDs; public registration and identity-provider integration are not implemented | `app/api/routes/chat.py` |

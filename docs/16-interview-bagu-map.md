@@ -10,7 +10,7 @@ This map connects common AI engineering interview topics to the implementation. 
 | Prompting and tools | [Agents and tools](05-agents-and-tools.md), `app/tools/` | Tool schemas, permissions, and confirmation are enforced in code. |
 | Memory and context | `app/memory/` | Compression is not long-term user memory. |
 | Reliability | `app/core/retry.py`, `app/services/container.py` | Retries target transient errors; model and vector backends have fallbacks. |
-| Evaluation | [Evaluation guide](10-evaluation.md), `eval/` | The English data is a starter set; inherited Chinese benchmark numbers do not measure this version. |
+| Evaluation | [Evaluation guide](10-evaluation.md), `eval/` | The evaluation datasets provide regression inputs; model-quality evaluation has not been run yet. |
 | Security | [Security guide](09-security.md) | The demo still trusts request-supplied `user_id`; production authentication and ownership checks remain open. |
 
 The previous interview materials referenced external study syllabi. This map records implementation paths in this repository and does not imply those study resources are project dependencies.

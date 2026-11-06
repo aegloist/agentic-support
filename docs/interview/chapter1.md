@@ -37,7 +37,7 @@ Intent recognition answers "what does the user want to do"; complexity routing a
 
 [`IntentClassifier`](../../app/agents/nodes/intent.py) uses structured model output, falling back to rules on failure; confusable phrases additionally pass through an override layer for correction. [`AdaptiveRouter`](../../app/retrieval/adaptive.py) estimates complexity from intent and query, outputting one of five strategies. JSON mode and low temperature only reduce output variance; the schema validation in [`json_parser.py`](../../app/providers/json_parser.py) is the boundary at which the program accepts a decision.
 
-Here is a number that is easy to be caught out on: on 100 historically self-built samples, `intent_v3` plus the override layer reached 100%. This is not a pure model result, nor production-distribution accuracy. The [measured records](../../eval/MEASURED.md) list every baseline; in an interview, state the sample source, the override layer, and the extrapolation limits together.
+Compare model classification with and without the override layer on the current intent dataset. Record the sample source, model configuration, and raw report before publishing accuracy. Current [evaluation status](../../eval/MEASURED.md) does not include a model-quality result.
 
 ## 1.4 The planner only proposes; the executor decides whether to act
 

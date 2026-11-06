@@ -38,7 +38,7 @@ The generation task compares answers without evidence, with retrieved evidence, 
 
 ## Reporting rules
 
-- Do not report inherited Chinese-corpus scores as results for the English adaptation.
+- Report scores only from runs against the current corpus, evaluation dataset, and model configuration.
 - Record model/provider, embedding model and dimensions, reranker, corpus version, dataset version, date, and raw output.
 - No English model-quality result has been measured yet; see `eval/MEASURED.md`.
 - Do not interpret an empty or missing report as a score of zero.

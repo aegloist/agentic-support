@@ -1,6 +1,6 @@
 # LangGraph State Machine, Plan-and-Execute, Intent and Evaluation
 
-> Corresponding resume line: **Built the core state machine on LangGraph, with planner and executor, unified tool integration, streaming output and exponential-backoff + jittered retry; parsed intent with a Prompt-template + DeepSeek v3 router, built 100 hand-written test queries and measured 97% intent-classification accuracy.**
+> Code-reading guide: trace the LangGraph state machine, planner and executor, tool integration, streaming output, retry behavior, and structured intent classification.
 
 ## Chapter Contents
 
@@ -10,7 +10,7 @@
 4. [Streaming Output](#4-streaming-output)
 5. [Exponential Backoff + Jittered Retry](#5-exponential-backoff-jittered-retry)
 6. [Intent Recognition and Routing](#6-intent-recognition-and-routing)
-7. [The 100 / 97% Numbers](#7-the-100-97-numbers)
+7. [Intent evaluation](#7-intent-evaluation)
 8. [Cross-Module Synthesis Questions](#8-cross-module-synthesis-questions)
 9. [Cross-Module Interview Questions](#9-cross-module-interview-questions)
 
@@ -62,17 +62,13 @@ Full jitter is what spreads fan-out bursts; equal jitter is what mobilizes them.
 
 ## 6. Intent Recognition and Routing
 
-Prompt-template + DeepSeek v3 was the synthesis of everything in section 3: intent classification based on a versioned prompt template with `json_object` output at `temperature=0`. The prompt was iterated against the 100-query set (v1: 85%; v3: 100% on the same set). Intent classification was never loaded from a JSON either — rule hits (`_HANDOFF`) degrade to fallback. No set-sync was performed; no search-augmentation was used.
+Prompt-template + DeepSeek v3 was the synthesis of everything in section 3: intent classification based on a versioned prompt template with `json_object` output at `temperature=0`. Prompt quality must be measured against the current intent dataset; no accuracy is published yet. Intent classification was never loaded from a JSON either — rule hits (`_HANDOFF`) degrade to fallback. No set-sync was performed; no search-augmentation was used.
 
 ---
 
-## 7. The 100 / 97% Numbers
+## 7. Intent evaluation
 
-A hand-written set of 100 queries covering the 14 intent classes, evaluated offline, gives the accurate numbers: 97%, not 100%. These are evaluation-set numbers, not production-query numbers, i.e., they measure prompt-template classification accuracy against a hand-written gold set.
-
-```python
-accuracy = correct / 100
-```
+Evaluate the current queries against their expected labels, and compare rules, model classification, and the overlay. Record the configuration and raw report before publishing accuracy. See [evaluation status](../../eval/MEASURED.md).
 
 ---
 

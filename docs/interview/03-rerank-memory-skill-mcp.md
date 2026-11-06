@@ -30,4 +30,4 @@ See `app/memory/budget.py` and `app/memory/compression.py`.
 
 ## 6. What can be claimed from evaluation?
 
-The English data is a starter set. The old Chinese-corpus benchmark numbers are not results for this adaptation. Do not put quality figures on a résumé until an English run records its model, corpus, dataset, configuration, date, and raw output in `eval/reports/` and `eval/MEASURED.md`.
+The datasets provide regression inputs. Report quality figures only after a run records its model, corpus, dataset, configuration, date, and raw output in `eval/reports/` and `eval/MEASURED.md`.

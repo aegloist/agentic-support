@@ -15,7 +15,7 @@ Use a concrete support question to introduce the problem, then trace the request
 
 ## Keep evidence separate from claims
 
-State whether a result is measured, inferred, or planned. A benchmark claim should link to its dataset, command, model configuration, run date, and raw report. The previous Chinese-corpus metrics do not measure the English adaptation. Until the English model and dataset are run, describe evaluation as a starter regression set only.
+State whether a result is measured, inferred, or planned. A benchmark claim should link to its dataset, command, model configuration, run date, and raw report. Model-quality evaluation has not been run yet. Describe the current datasets as regression inputs until a model evaluation produces a saved report.
 
 ## Keep setup reproducible
 

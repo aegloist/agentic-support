@@ -1,12 +1,10 @@
 # Interviewer: Is this RAG a demo, or can it ship?
 
-> Historical interview notes: the figures below describe the earlier Chinese-corpus version measured on 2026-08-22 with DeepSeek `deepseek-chat` and a Cross-Encoder. They are not results for the current English adaptation; see `eval/MEASURED.md` for current status. To map zero2Agent evaluation dimensions onto project modules and code, use [16 · Project Interview Map](16-interview-bagu-map.md).
+> Use the current code and recorded checks when explaining the project. Model-quality status is documented in [eval/MEASURED.md](../eval/MEASURED.md).
 
-## What one interview taught me
+## Engineering questions
 
-"'So tell me,' the interviewer opens. 'Your resume says you built an Adaptive-RAG multi-agent support bot. First question: do you run vector retrieval on every single query?'"
-
-That was the first probe I got. Many people reflexively answer "yes — embed, then top-k." That is exactly the answer the interviewer wants you to **reject**.
+A useful question when reviewing the assistant is whether every message needs vector retrieval. Route selection should reflect the request: greetings, policy questions, and order actions need different paths.
 
 E-commerce after-sales is not "encyclopedia Q&A." Users say "hi", ask for a human agent, ask whether `ORD10001` shipped, or request a refund. If greetings also hit the vector store, you waste more than money — you add latency and open up room for hallucination.
 
@@ -251,7 +249,7 @@ if not lexical and not dense:
 fused = reciprocal_rank_fusion([lexical, dense], k=self._rrf_k)
 ```
 
-**You must say proactively:** the historical dense path was `bge-small-zh-v1.5` (not m3). Vector-only P@1 **83.1%**, R@3 **94.6%**. BM25 baseline 76.9% / 90% / 0.84. On these 65 cases RRF matches small-only; the Cross-Encoder lifts P@1 / R@3 to **89.2% / 97.7%**. The same-day hash baseline only reached Hit@1 3.1%.
+Compare dense retrieval, BM25, fusion, and reranking on the same dataset before attributing improvements to a particular stage.
 
 ### 2.4 Self-RAG is not special tokens
 
@@ -291,9 +289,9 @@ Policy Q&A can be RAG; "cancel ORD10003" must hit the order database, and the mo
 
 Production path: DeepSeek emits JSON (`intent_v3`) → a high-confidence overlay corrects it (handoff beats refund/complaint; "how does it work" goes to policy, "can this item be returned" goes to returns/exchange). If the LLM is down, keyword rules take over, then the same overlay.
 
-100-case offline set: rules 51% → no-overlay v1/v2 ~85%/86% → **v3+overlay 100%**.
+The current intent dataset supports comparing rule classification, model classification, and the overlay. No model accuracy is published yet.
 
-**Say proactively:** accuracy includes the overlay; the overlay targets stable Chinese support phrases, it is not gold labels hardcoded per `i070`. The eval supports `apply_overlay=False` for ablation.
+The overlay prioritizes explicit support phrases. The evaluator supports `apply_overlay=False` to isolate its contribution.
 
 ### 3.2 On-demand Skill loading
 
@@ -320,15 +318,7 @@ Only read-tool failures swap tools, e.g. `get_order` → `search_knowledge`. **P
 
 ### 3.5 Faithfulness self-correction
 
-After generation, the judge grades `supported`. On failure, the LLM first rewrites once against the evidence, then extractive fallback. 65 cases (same-model judge, optimistic):
-
-| | Faithfulness | Hallucination rate | Keyword hits |
-|---|---|---|---|
-| No retrieval | 76.9% | 23.1% | 35.4% |
-| RAG | 98.5% | 1.5% | 84.6% |
-| RAG + self-correction | 100% | 0% | 84.6% |
-
-No-retrieval faithfulness falls in the 54%–88% band; relative hallucination reduction 100%. Keyword hits are more independent than same-model faithfulness — put both side by side in interviews.
+After generation, the judge grades `supported`. On failure, the LLM first rewrites once against the evidence, then extractive fallback. Measure keyword support alongside model-judged faithfulness. A model judging its own answers can be optimistic; no measured reduction is published yet.
 
 ---
 
@@ -354,9 +344,9 @@ def precision_at_k(relevant, retrieved, k):
     return sum(item in relevant for item in top) / len(top)
 ```
 
-E2E 16 cases (including injection): refusal/tool paths 100%; keywords **9/11**; P50 **4.9s** / P95 **5.8s**. Injection refusal takes about 10ms — because it never touches the LLM.
+The end-to-end dataset covers regression paths. Measure live latency and response quality with the selected model before reporting results.
 
-pytest clears real keys and doesn't download local models (`tests/conftest.py`), 154 passed. Live numbers require `--llm`.
+pytest uses isolated test configuration without live model credentials. Recorded application checks are listed in [local verification](verification.md).
 
 **You cannot write:** "CE lifted Precision to xx" without the Cross-Encoder loaded; "hallucination dropped 62%" without running generation.
 
@@ -399,19 +389,19 @@ What the interviewer really wants to hear isn't framework names — it's whether
 A: Adaptive routing. Greeting → Direct; out-of-scope → Refuse; policy → Single/Multi; orders → Agent. The paper's three tiers aren't enough for e-commerce.
 
 **Q: How does Hybrid fuse?**
-A: RRF fuses ranks; k=60 is the literature default. BM25 and cosine have different scales. This round, `bge-small`-only P@1 was 83.1%; RRF matched small-only; externally report Hybrid+CE 89.2% / 97.7% / 0.94. Hash baseline Hit@1 was 3.1%.
+A: RRF fuses rankings rather than incomparable raw scores from BM25 and vector search. Compare the individual channels, fusion, and reranking on the current dataset before claiming a gain.
 
 **Q: How do you suppress hallucinations?**
-A: A post-generation faithfulness check; on failure the LLM rewrites against the evidence first, then extractive fallback. On 65 cases: no-retrieval hallucination 20% → RAG 3.1% → self-correction 0%. The same-model judge is optimistic, so keyword hits are reported alongside: 36.9% → 95.4%.
+A: A post-generation faithfulness check can trigger a rewrite against the evidence and then an extractive fallback. Measure its effect on the current generation dataset; the check is a model judgment rather than a guarantee.
 
 **Q: Can a refund misfire? Can it refund twice?**
 A: write/destructive requires `confirm_action_id`. Idempotency key + parameter fingerprint. Only read failures trigger fallback; write failures never switch to another write tool.
 
 **Q: How do you prove it's not a demo?**
-A: Offline set + `eval.runner` + pytest. Resume numbers defer to MEASURED. P50 4.9s / P95 5.8s. Intent: 100 cases at 100% including the overlay. Hybrid+CE P@1 89.2%.
+A: Use reproducible evaluation inputs, saved runner output, and automated tests. Current application checks are recorded in [local verification](verification.md); model-quality results have not been published.
 
 **Q: What's still missing?**
-A: No CE numbers unless the Cross-Encoder is loaded; the dense path is small, not m3; RRF didn't beat small-only on this set; orders are seed data, not carrier APIs; the token budget is a heuristic, not the official tokenizer.
+A: Live model quality and latency still require measurement. Orders use demonstration data, and token budgeting uses a character-count heuristic rather than a provider tokenizer.
 
 If all you can say is "I hooked LangChain up to a vector store," it's still a toy. If you can connect the sections above, and the numbers match the repo, that's what "engineering-grade, deployable" means in this project.
 

@@ -182,16 +182,7 @@ RRF can only say "both channels ranked it high"; it cannot judge "does this chun
 
 ## Evaluation Protocol
 
-Historical Chinese-corpus baseline (2026-08-22; not a result for this English adaptation), report `all_20260822T121308Z.json` (not shipped with the repo):
-
-| System | Precision@1 | Recall@3 | MRR |
-|---|---|---|---|
-| BM25 | 76.9% | 90% | 0.84 |
-| bge-small only | 83.1% | 94.6% | 0.89 |
-| BM25 + small + RRF | 83.1% | 94.6% | 0.89 |
-| Hybrid + Cross-Encoder | **89.2%** | **97.7%** | **0.94** |
-
-After any prompt, chunking, parser, or knowledge-base change, rerun `--task retrieval` and update `MEASURED.md`.
+No model-quality result is published yet. Record the current corpus, dataset, model configuration, and raw run output before reporting scores. See [evaluation status](../eval/MEASURED.md).
 
 ---
 
