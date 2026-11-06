@@ -1,0 +1,21 @@
+{
+  "name": "return_handling",
+  "description": "Standard flow for handling returns and exchanges",
+  "triggers": [
+    "return",
+    "exchange",
+    "30-day change-of-mind"
+  ],
+  "steps": [
+    "Confirm the order ID and whether the item is personalized",
+    "Retrieve the return and exchange policy",
+    "Check whether the item is within the 30-day window",
+    "If an application is needed, create a pending write action"
+  ],
+  "tools": [
+    "get_order",
+    "get_order_items",
+    "search_knowledge",
+    "create_return_request"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "order_tracking",
+  "description": "Order and shipment tracking",
+  "triggers": [
+    "tracking",
+    "shipment",
+    "where is my order",
+    "where is my package"
+  ],
+  "steps": [
+    "Look up the order",
+    "Fetch the shipment tracking history",
+    "Explain the current status and delivery estimate"
+  ],
+  "tools": [
+    "get_order",
+    "track_shipment"
+  ]
+}

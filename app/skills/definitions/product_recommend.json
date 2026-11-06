@@ -1,0 +1,20 @@
+{
+  "name": "product_recommend",
+  "description": "Product recommendation",
+  "triggers": [
+    "recommend",
+    "anything similar",
+    "similar to",
+    "best-selling"
+  ],
+  "steps": [
+    "Understand the customer's needs",
+    "Search and recommend products",
+    "Check inventory"
+  ],
+  "tools": [
+    "search_products",
+    "recommend_products",
+    "check_inventory"
+  ]
+}

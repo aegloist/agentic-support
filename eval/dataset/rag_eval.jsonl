@@ -1,0 +1,65 @@
+{"id": "r001", "query": "What is the return window for a standard item?", "relevant_doc_ids": ["return_policy"], "gold_answer_contains": ["30 days"]}
+{"id": "r002", "query": "Is standard shipping free on orders over $59?", "relevant_doc_ids": ["shipping", "coupons"], "gold_answer_contains": ["$59"]}
+{"id": "r003", "query": "Who pays return shipping for a defective item?", "relevant_doc_ids": ["return_policy"], "gold_answer_contains": ["Northstar Market"]}
+{"id": "r004", "query": "How do I request a business invoice?", "relevant_doc_ids": ["invoice_vat"], "gold_answer_contains": ["business invoice"]}
+{"id": "r005", "query": "How long is the electronics warranty?", "relevant_doc_ids": ["warranty"], "gold_answer_contains": ["one-year"]}
+{"id": "r006", "query": "Can I pay in installments?", "relevant_doc_ids": ["payment_methods"], "gold_answer_contains": ["checkout"]}
+{"id": "r007", "query": "When is an unpaid order cancelled?", "relevant_doc_ids": ["faq"], "gold_answer_contains": ["order number"]}
+{"id": "r008", "query": "Can rewards points pay for shipping?", "relevant_doc_ids": ["points_expiry"], "gold_answer_contains": ["checkout"]}
+{"id": "r009", "query": "What are customer support hours?", "relevant_doc_ids": ["handoff_hours"], "gold_answer_contains": ["human"]}
+{"id": "r010", "query": "Are refund requests reviewed overnight?", "relevant_doc_ids": ["handoff_hours"], "gold_answer_contains": ["human"]}
+{"id": "r011", "query": "Can I return opened electronics for change of mind?", "relevant_doc_ids": ["return_electronics"], "gold_answer_contains": ["30 days"]}
+{"id": "r012", "query": "How long do I have to report a defective item?", "relevant_doc_ids": ["return_policy"], "gold_answer_contains": ["30 days"]}
+{"id": "r013", "query": "Can I return an item after 30 days without a defect?", "relevant_doc_ids": ["return_policy"], "gold_answer_contains": ["30 days"]}
+{"id": "r014", "query": "Can I return washed apparel?", "relevant_doc_ids": ["return_apparel"], "gold_answer_contains": ["unworn"]}
+{"id": "r015", "query": "How soon are orders dispatched?", "relevant_doc_ids": ["shipping"], "gold_answer_contains": ["two business days"]}
+{"id": "r016", "query": "How long does remote-area delivery take?", "relevant_doc_ids": ["shipping_remote"], "gold_answer_contains": ["checkout"]}
+{"id": "r017", "query": "Is there an extra fee for remote-area delivery?", "relevant_doc_ids": ["shipping_remote"], "gold_answer_contains": ["surcharge"]}
+{"id": "r018", "query": "When can I ask about an order that has not shipped?", "relevant_doc_ids": ["shipping"], "gold_answer_contains": ["two business days"]}
+{"id": "r019", "query": "When should I ask support to investigate stalled tracking?", "relevant_doc_ids": ["logistics_exception"], "gold_answer_contains": ["three business days"]}
+{"id": "r020", "query": "How long is the home-goods warranty?", "relevant_doc_ids": ["warranty"], "gold_answer_contains": ["one-year"]}
+{"id": "r021", "query": "Does the warranty cover liquid damage?", "relevant_doc_ids": ["warranty"], "gold_answer_contains": ["excluded"]}
+{"id": "r022", "query": "How do I submit a warranty claim?", "relevant_doc_ids": ["warranty"], "gold_answer_contains": ["order number"]}
+{"id": "r023", "query": "What is the minimum order for the NEW10 coupon?", "relevant_doc_ids": ["coupons"], "gold_answer_contains": ["$99"]}
+{"id": "r024", "query": "Can I combine the welcome coupon with a category coupon?", "relevant_doc_ids": ["coupons"], "gold_answer_contains": ["cannot be combined"]}
+{"id": "r025", "query": "Can a free-shipping coupon cover remote-area fees?", "relevant_doc_ids": ["coupons", "shipping_remote"], "gold_answer_contains": ["surcharges"]}
+{"id": "r026", "query": "Can rewards points pay for shipping?", "relevant_doc_ids": ["points_expiry"], "gold_answer_contains": ["checkout"]}
+{"id": "r027", "query": "Can I use NEW10 on a custom item?", "relevant_doc_ids": ["coupons", "return_custom"], "gold_answer_contains": ["NEW10"]}
+{"id": "r028", "query": "How long do approved refunds take?", "relevant_doc_ids": ["refund_timeline"], "gold_answer_contains": ["5–10 business days"]}
+{"id": "r029", "query": "Should I inspect a package when it arrives?", "relevant_doc_ids": ["shipping"], "gold_answer_contains": ["checkout"]}
+{"id": "r030", "query": "Can I request an invoice for a business order?", "relevant_doc_ids": ["invoice_vat"], "gold_answer_contains": ["business invoice"]}
+{"id": "r031", "query": "Does opening a headset affect warranty coverage?", "relevant_doc_ids": ["warranty"], "gold_answer_contains": ["unauthorized modification"]}
+{"id": "r032", "query": "When will a preorder ship?", "relevant_doc_ids": ["live_presale"], "gold_answer_contains": ["product page"]}
+{"id": "r033", "query": "Can I return an activated electronic item?", "relevant_doc_ids": ["return_electronics"], "gold_answer_contains": ["confirmed defect"]}
+{"id": "r034", "query": "Can I exchange apparel after washing it?", "relevant_doc_ids": ["return_apparel", "exchange_size"], "gold_answer_contains": ["unworn"]}
+{"id": "r035", "query": "Can I return opened perishable food?", "relevant_doc_ids": ["return_food"], "gold_answer_contains": ["24 hours"]}
+{"id": "r036", "query": "Can I change personalized text after production starts?", "relevant_doc_ids": ["return_custom"], "gold_answer_contains": ["production begins"]}
+{"id": "r037", "query": "How many times can I exchange an apparel item?", "relevant_doc_ids": ["exchange_size"], "gold_answer_contains": ["subject to stock"]}
+{"id": "r038", "query": "What should I do if an item is missing from my package?", "relevant_doc_ids": ["missing_wrong_item"], "gold_answer_contains": ["seven days"]}
+{"id": "r039", "query": "When does an installment payment limit update after a refund?", "relevant_doc_ids": ["payment_methods", "refund_timeline"], "gold_answer_contains": ["payment provider"]}
+{"id": "r040", "query": "How do I schedule pickup for a return?", "relevant_doc_ids": ["pickup_return"], "gold_answer_contains": ["supported postal codes"]}
+{"id": "r041", "query": "Is there an extra delivery fee for island destinations?", "relevant_doc_ids": ["shipping_remote"], "gold_answer_contains": ["checkout"]}
+{"id": "r042", "query": "Will a split shipment charge shipping twice?", "relevant_doc_ids": ["shipping_split"], "gold_answer_contains": ["separately"]}
+{"id": "r043", "query": "Is payment at delivery available, and what does it cost?", "relevant_doc_ids": ["shipping_cod"], "gold_answer_contains": ["not currently offered"]}
+{"id": "r044", "query": "Tracking says delivered, but I did not receive the package. What now?", "relevant_doc_ids": ["logistics_exception"], "gold_answer_contains": ["order page"]}
+{"id": "r045", "query": "Can I change the delivery address after dispatch?", "relevant_doc_ids": ["shipping_address"], "gold_answer_contains": ["carrier"]}
+{"id": "r046", "query": "How long is the rechargeable battery warranty?", "relevant_doc_ids": ["warranty_battery"], "gold_answer_contains": ["six months"]}
+{"id": "r047", "query": "What is included with appliance installation?", "relevant_doc_ids": ["install_appliance"], "gold_answer_contains": ["checkout"]}
+{"id": "r048", "query": "Is there a fee for an out-of-warranty home repair inspection?", "relevant_doc_ids": ["repair_onsite"], "gold_answer_contains": ["diagnostic fee"]}
+{"id": "r049", "query": "How long is the jewelry warranty?", "relevant_doc_ids": ["warranty_jewelry"], "gold_answer_contains": ["90-day"]}
+{"id": "r050", "query": "What installment terms are available?", "relevant_doc_ids": ["payment_methods"], "gold_answer_contains": ["checkout"]}
+{"id": "r051", "query": "How do I get a business receipt or invoice?", "relevant_doc_ids": ["invoice_vat"], "gold_answer_contains": ["digital receipt"]}
+{"id": "r052", "query": "What benefits come with Northstar Plus?", "relevant_doc_ids": ["membership_plus"], "gold_answer_contains": ["current plan"]}
+{"id": "r053", "query": "When do rewards points expire?", "relevant_doc_ids": ["points_expiry"], "gold_answer_contains": ["account"]}
+{"id": "r054", "query": "Can support ask for my one-time verification code?", "relevant_doc_ids": ["account_security"], "gold_answer_contains": ["one-time verification code"]}
+{"id": "r055", "query": "What gift-card amounts are available, and can I redeem one for cash?", "relevant_doc_ids": ["gift_card"], "gold_answer_contains": ["cannot be exchanged for cash"]}
+{"id": "r056", "query": "What measurements are in the T-shirt size guide?", "relevant_doc_ids": ["size_guide"], "gold_answer_contains": ["measurements"]}
+{"id": "r057", "query": "Can I cancel a preorder deposit after the sale ends?", "relevant_doc_ids": ["live_presale"], "gold_answer_contains": ["terms"]}
+{"id": "r058", "query": "Do international orders have the same return window?", "relevant_doc_ids": ["cross_border", "return_policy"], "gold_answer_contains": ["destination country"]}
+{"id": "r059", "query": "How quickly will support review a complaint?", "relevant_doc_ids": ["complaint_sla"], "gold_answer_contains": ["human"]}
+{"id": "r060", "query": "Can I reach a human agent overnight?", "relevant_doc_ids": ["handoff_hours"], "gold_answer_contains": ["at any time"]}
+{"id": "r061", "query": "How long after purchase can I ask for a price adjustment?", "relevant_doc_ids": ["price_protect"], "gold_answer_contains": ["seven days"]}
+{"id": "r062", "query": "How long does a back-in-stock alert reserve an item?", "relevant_doc_ids": ["restock_notify"], "gold_answer_contains": ["does not reserve"]}
+{"id": "r063", "query": "Is gift wrapping available, and is there a fee?", "relevant_doc_ids": ["packaging_gift"], "gold_answer_contains": ["checkout"]}
+{"id": "r064", "query": "Can support repeat my full payment-card number?", "relevant_doc_ids": ["privacy_cs", "account_security"], "gold_answer_contains": ["Never"]}
+{"id": "r065", "query": "Can I combine a flash sale with a Northstar Plus shipping benefit?", "relevant_doc_ids": ["promo_stacking", "membership_plus"], "gold_answer_contains": ["checkout"]}

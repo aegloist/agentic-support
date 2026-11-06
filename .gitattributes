@@ -1,0 +1,32 @@
+# Normalize line endings to LF to avoid cross-platform diff noise
+* text=auto eol=lf
+
+# Don't convert line endings for binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ico binary
+
+# Declare explicit text types
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.txt text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.mako text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+
+# Exclude documentation-type files from the "code" language stats
+docs/** linguist-documentation
+knowledge/** linguist-documentation

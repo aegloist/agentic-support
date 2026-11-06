@@ -1,0 +1,22 @@
+{
+  "name": "order_cancellation",
+  "description": "Confirmation flow for cancelling an order that has not shipped",
+  "triggers": [
+    "cancel my order",
+    "cancel order",
+    "cancel ord",
+    "don't want it",
+    "do not want it",
+    "cancel"
+  ],
+  "steps": [
+    "Verify the order ID and current status",
+    "Check that the order has not shipped yet",
+    "Show a pending confirmation action before cancelling",
+    "Execute the cancellation after the user confirms"
+  ],
+  "tools": [
+    "get_order",
+    "cancel_order"
+  ]
+}
