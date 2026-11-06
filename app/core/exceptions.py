@@ -51,6 +51,13 @@ class UnauthorizedError(AppError):
         super().__init__(message, error_code=ErrorCode.UNAUTHORIZED, http_status=401)
 
 
+class SessionNotFoundError(AppError):
+    def __init__(self) -> None:
+        super().__init__(
+            "Conversation not found", error_code=ErrorCode.SESSION_NOT_FOUND, http_status=404
+        )
+
+
 class LLMProviderError(AppError):
     def __init__(
         self,

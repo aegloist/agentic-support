@@ -158,6 +158,12 @@ class ChatService:
         if not allowed:
             raise RateLimitError()
 
+    async def validate_session(self, request: ChatRequest) -> None:
+        """Reject inaccessible conversations before the SSE response starts."""
+        if request.session_id:
+            async with request_session(self._session_factory) as db:
+                await SessionRepository(db).get_owned(request.session_id, request.user_id)
+
     async def _initial_state(
         self,
         db: AsyncSession,
@@ -167,15 +173,19 @@ class ChatService:
     ) -> AgentState:
         confirmed_action = self._resolve_confirmation(request, session_id)
         sessions = SessionRepository(db)
-        await sessions.get_or_create(session_id, request.user_id)
-        history = await sessions.recent_messages(session_id)
+        row = (
+            await sessions.get_owned(session_id, request.user_id)
+            if request.session_id
+            else await sessions.get_or_create(session_id, request.user_id)
+        )
+        history = await sessions.recent_messages(session_id, request.user_id)
         return {
             "trace_id": trace_id,
             "session_id": session_id,
             "user_id": request.user_id,
             "user_query": request.message,
             "messages": history,
-            "summary": "",
+            "summary": row.summary,
             "retrieved_chunks": [],
             "tool_results": [],
             "citations": [],
@@ -240,10 +250,12 @@ class ChatService:
         summary: str = "",
     ) -> None:
         sessions = SessionRepository(db)
-        await sessions.append_message(response.session_id, "user", request.message)
-        await sessions.append_message(response.session_id, "assistant", response.answer)
+        await sessions.append_message(response.session_id, request.user_id, "user", request.message)
+        await sessions.append_message(
+            response.session_id, request.user_id, "assistant", response.answer
+        )
         if summary:
-            await sessions.save_summary(response.session_id, summary)
+            await sessions.save_summary(response.session_id, request.user_id, summary)
 
     def _to_response(
         self,

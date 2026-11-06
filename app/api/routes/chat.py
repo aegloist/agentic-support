@@ -34,6 +34,7 @@ async def chat_stream(
     """Answer one turn as an SSE stream of node, token and answer events."""
 
     payload = payload.model_copy(update={"user_id": user_id})
+    await container.chat_service.validate_session(payload)
 
     async def events():
         async for item in container.chat_service.stream(payload, trace_id=request.state.trace_id):
