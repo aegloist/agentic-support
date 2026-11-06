@@ -10,7 +10,14 @@ services:
       QDRANT_URL: ""
       APP_ENV: production
       LOG_LEVEL: INFO
-      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      AUTH_TOKENS: ${AUTH_TOKENS:?Set AUTH_TOKENS in .env before starting}
+      LLM_API_KEY: ${LLM_API_KEY:-${DEEPSEEK_API_KEY:-}}
+      LLM_BASE_URL: ${LLM_BASE_URL:-${DEEPSEEK_BASE_URL:-https://api.deepseek.com}}
+      LLM_MODEL: ${LLM_MODEL:-${DEEPSEEK_MODEL:-deepseek-chat}}
+      EMBEDDING_API_KEY: ${EMBEDDING_API_KEY:-}
+      EMBEDDING_BASE_URL: ${EMBEDDING_BASE_URL:-}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-bge-small-en-v1.5}
+      EMBEDDING_DIM: ${EMBEDDING_DIM:-384}
       LOCAL_EMBEDDING_ENABLED: "false"
       CROSS_ENCODER_ENABLED: "false"
       UNSTRUCTURED_ENABLED: "false"

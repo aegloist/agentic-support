@@ -15,6 +15,8 @@ SQLite + in-memory vectors — see [02](02-getting-started.md).
 
 ## Docker Compose
 
+Copy `.env.example` to `.env` and configure `AUTH_TOKENS` before starting. Each token must be unique, randomly generated, and at least 32 characters long. Chat is authenticated; the web sign-in form asks for the access token. `LLM_*` selects the generation endpoint; the default demo intentionally uses hash embeddings and lexical reranking unless a real embedding API is configured.
+
 ```bash
 docker compose up --build -d
 ```
@@ -27,7 +29,7 @@ Once started, visit `http://127.0.0.1:8000`; stop with `docker compose down`. Da
 |---|---|---|---|
 | Default demo | `docker-compose.yml` | API, frontend, SQLite | Fewest dependencies, auto degradation |
 | Single-node production | `docker-compose.single.yml` | API, frontend, PostgreSQL, Redis | Long-running single node |
-| Multi-instance production | `docker-compose.multi.yml` | Nginx, dual API, PostgreSQL, Redis, Qdrant | Scaling and shared state |
+| Multi-instance experiment | `docker-compose.multi.yml` | Nginx, dual API, PostgreSQL, Redis, Qdrant | Experimental: pending confirmations remain process-local |
 
 ```bash
 # Set the database password first for single-node and multi-instance modes
@@ -65,18 +67,20 @@ Health checks hit `http://127.0.0.1:8000/api/v1/health`. Image runs non-root, an
 - [ ] After `pip install -e ".[rerank]"`, rerun retrieval; the report must contain `hybrid+cross-encoder`
 - [ ] After `pip install -e ".[docs]"`, verify ingest with real PDFs/scans; after any chunking change, rerun `--task retrieval`
 - [x] `u_demo` / `anonymous` global order reads are disabled
-- [ ] Authenticate users at a trusted gateway and bind `user_id`; the request body can currently be spoofed, so do not expose the API directly to the public internet
+- [x] Private-demo bearer tokens bind identity on the server; the request-body user ID is ignored
+- [x] Conversation and order access is checked against the authenticated user
+- [ ] HTTPS, token provisioning, and revocation process reviewed before deployment
 - [ ] liveness / readiness separated (see [08](08-reliability.md#health-checks))
 - [ ] No secrets in logs, images, or README
 - [ ] Long-running Postgres uses Alembic (startup still runs `create_all` for now)
 
 ## Scaling, knowledge base, rollback
 
-The API is not sticky: sessions live in the DB. In-process rate limiting is not shared across replicas → configure Redis in production. The Graph is compiled once per process.
+Use one API process for the current private demo. Conversation history lives in the DB, but pending confirmations live in memory for 15 minutes. A restart discards pending confirmations, and the experimental multi-instance layout can route a confirmation to another process. Do not describe that layout as verified for confirmed actions. In-process rate limiting is not shared across replicas → configure Redis in production. The Graph is compiled once per process.
 
-After changing documents in `knowledge/`, restart the API. `chunk_id` values are stable under identical chunking, and Qdrant upsert overwrites. No CMS. Production ingest uses Unstructured; the system package needs poppler, tesseract (`chi_sim`), and libreoffice for Office files. After any parser change, rerun `--task retrieval`.
+After changing documents in `knowledge/`, restart the API. `chunk_id` values are stable under identical chunking, and Qdrant upsert overwrites. No CMS. Production ingest uses Unstructured; the system package needs poppler, tesseract (`eng`), and libreoffice for Office files. After any parser change, rerun `--task retrieval`.
 
-The application is stateless (except the DB). Rolling back is just rolling back the image. Alembic `0002` added the refunds table; schema rollback requires an explicit `downgrade`.
+Rolling back the image also discards in-memory pending confirmations. Persistent database changes must be considered separately. Alembic `0002` added the refunds table; schema rollback requires an explicit `downgrade`.
 
 ---
 
