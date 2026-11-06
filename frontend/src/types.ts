@@ -32,8 +32,12 @@ export interface ChatResponse {
 export interface ChatRequest {
   message: string;
   session_id?: string;
-  user_id: string;
   confirm_action_id?: string;
+}
+
+export interface AuthSession {
+  userId: string;
+  token: string;
 }
 
 export interface Capabilities {

@@ -32,5 +32,6 @@ The build output goes to `frontend/dist`. Once FastAPI detects that directory, i
 - The browser stores the session list and visible messages in versioned `localStorage`, keeping at most 50 sessions with at most 100 messages each. The backend currently has no history-list endpoint; after clearing browser data or switching browsers, the local list is not restored.
 - The `session_id` returned by the backend is saved with the session and reused for follow-up turns.
 - Pending confirmations are kept in the server process for 15 minutes; if the service restarts or the request lands on a different process, the operation must be initiated again.
-- `VITE_DEMO_USER_ID` defaults to `u_demo` and is for local demo purposes only. The backend **does not yet authenticate** the `user_id` in requests. Before deploying to untrusted users, a trusted authentication layer must bind identity on the server side.
+- Enter an owner-issued access token to sign in. The server returns the associated user ID; tokens are kept only in React memory, never browser storage or frontend build settings. Signing out unmounts the workspace and aborts active requests.
+- Browser history is stored under a separate key per authenticated user. Legacy shared history is not loaded. Browser local storage is not encrypted; clear site data on shared devices.
 - `VITE_API_BASE` can point to a separately deployed API; in that case the API must explicitly allow the frontend's origin.

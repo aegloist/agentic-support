@@ -223,3 +223,10 @@ button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px
 .fatal-error h1 { margin: 0; font-size: 22px; }
 .fatal-error p { margin: 0; color: var(--muted); font-size: 14px; }
 .fatal-error button { margin-top: 12px; padding: 9px 16px; border: 0; border-radius: 8px; background: var(--primary); color: var(--primary-text); }
+
+.sign-in { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+.sign-in-card { width: min(100%, 420px); display: grid; gap: 16px; padding: 28px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); }
+.sign-in-card h1, .sign-in-card p { margin: 0; }
+.sign-in-card p { color: var(--muted); font-size: 14px; line-height: 1.5; }
+.sign-in-card input { min-width: 0; padding: 12px; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--canvas); }
+.sign-in-card button { padding: 12px; }

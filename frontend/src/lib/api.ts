@@ -3,6 +3,20 @@ import { SseDecoder } from "./sse";
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? "";
 
+export async function authenticate(token: string): Promise<string> {
+  const response = await fetch(`${API_BASE}/api/v1/auth/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error(response.status === 401
+    ? "That access token was not accepted. Check it and try again."
+    : "Sign-in is temporarily unavailable. Please try again.");
+  const body: unknown = await response.json();
+  if (typeof body !== "object" || body === null || !("user_id" in body) || typeof body.user_id !== "string") {
+    throw new Error("The service returned an invalid sign-in response.");
+  }
+  return body.user_id;
+}
+
 export async function checkHealth(signal?: AbortSignal): Promise<boolean> {
   try {
     const response = await fetch(`${API_BASE}/api/v1/health`, { signal });
@@ -25,10 +39,11 @@ export async function streamChat(
   payload: ChatRequest,
   onEvent: (event: StreamEvent) => void,
   signal: AbortSignal,
+  token: string,
 ): Promise<void> {
   const response = await fetch(`${API_BASE}/api/v1/chat/stream`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
+    headers: { "Content-Type": "application/json", Accept: "text/event-stream", Authorization: `Bearer ${token}` },
     body: JSON.stringify(payload),
     signal,
   });

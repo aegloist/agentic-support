@@ -93,11 +93,9 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-const DEMO_USER_ID = import.meta.env.VITE_DEMO_USER_ID || "u_demo";
-
-export function useChat() {
+export function useChat(userId: string, token: string) {
   const [state, dispatch] = useReducer(reducer, undefined, () => ({
-    conversations: loadConversations(),
+    conversations: loadConversations(userId),
     activeId: null,
   }));
   const stateRef = useRef(state);
@@ -107,15 +105,18 @@ export function useChat() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => saveConversations(state.conversations), 300);
+    const timer = window.setTimeout(() => saveConversations(userId, state.conversations), 300);
     return () => window.clearTimeout(timer);
-  }, [state.conversations]);
+  }, [state.conversations, userId]);
 
   useEffect(() => {
-    const flush = () => saveConversations(stateRef.current.conversations);
+    const flush = () => saveConversations(userId, stateRef.current.conversations);
     window.addEventListener("pagehide", flush);
-    return () => window.removeEventListener("pagehide", flush);
-  }, []);
+    return () => {
+      flush();
+      window.removeEventListener("pagehide", flush);
+    };
+  }, [userId]);
 
   useEffect(() => () => requestRef.current?.abort(), []);
 
@@ -145,7 +146,6 @@ export function useChat() {
       await streamChat(
         {
           message: text,
-          user_id: DEMO_USER_ID,
           ...(conversation.sessionId ? { session_id: conversation.sessionId } : {}),
           ...(confirmActionId ? { confirm_action_id: confirmActionId } : {}),
         },
@@ -159,6 +159,7 @@ export function useChat() {
           }
         },
         controller.signal,
+        token,
       );
       if (!answered) throw new Error("The connection ended before a complete response arrived. Please try again.");
       return true;
@@ -179,7 +180,7 @@ export function useChat() {
       busyRef.current = false;
       setBusy(false);
     }
-  }, []);
+  }, [token]);
 
   const select = useCallback((id: string | null) => {
     stop();

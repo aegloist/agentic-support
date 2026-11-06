@@ -1,12 +1,14 @@
 import type { Conversation, Message } from "../types";
 
-const KEY = "agentic-support-web:v1";
+function storageKey(userId: string): string {
+  return `agentic-support-web:v2:${encodeURIComponent(userId)}`;
+}
 const MAX_CONVERSATIONS = 50;
 const MAX_MESSAGES = 100;
 
-export function loadConversations(): Conversation[] {
+export function loadConversations(userId: string): Conversation[] {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(storageKey(userId));
     if (!raw) return [];
     const value: unknown = JSON.parse(raw);
     if (!Array.isArray(value)) return [];
@@ -22,10 +24,10 @@ export function loadConversations(): Conversation[] {
   }
 }
 
-export function saveConversations(conversations: Conversation[]): void {
+export function saveConversations(userId: string, conversations: Conversation[]): void {
   try {
     localStorage.setItem(
-      KEY,
+      storageKey(userId),
       JSON.stringify(conversations.slice(0, MAX_CONVERSATIONS).map((item) => ({
         ...item,
         messages: item.messages.slice(-MAX_MESSAGES),

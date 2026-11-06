@@ -7,7 +7,8 @@ import { Logo } from "./components/Logo";
 import { MessageView } from "./components/MessageView";
 import { SearchDialog } from "./components/SearchDialog";
 import { Sidebar } from "./components/Sidebar";
-import type { ActionProposal } from "./types";
+import { SignIn } from "./components/SignIn";
+import type { ActionProposal, AuthSession } from "./types";
 
 const SUGGESTIONS = [
   { icon: "↗", title: "Returns policy", prompt: "Can I return a custom item that arrived damaged?" },
@@ -17,7 +18,14 @@ const SUGGESTIONS = [
 ];
 
 function App() {
-  const chat = useChat();
+  const [session, setSession] = useState<AuthSession | null>(null);
+  return session
+    ? <SupportWorkspace key={session.userId} session={session} onSignOut={() => setSession(null)} />
+    : <SignIn onSignIn={setSession} />;
+}
+
+function SupportWorkspace({ session, onSignOut }: { session: AuthSession; onSignOut: () => void }) {
+  const chat = useChat(session.userId, session.token);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -67,6 +75,7 @@ function App() {
       <header className="topbar">
         <button className="icon-button open-sidebar" aria-label="Open sidebar" title="Open sidebar" onClick={() => { setSidebarCollapsed(false); setSidebarOpen(true); }}>{sidebarCollapsed ? <PanelLeftOpen size={20} /> : <Menu size={20} />}</button>
         <span className="model-title">Agentic Support</span>
+        <button className="cancel-button" onClick={onSignOut}>Sign out</button>
         <div className="topbar-right"><span className={`connection-pill ${healthy === false ? "offline" : ""}`}><span />{healthy === null ? "Connecting" : healthy ? "Connected" : "Service unavailable"}</span><button className="icon-button help-button" title="Help" aria-label="Help" onClick={() => window.open("/docs", "_blank", "noopener,noreferrer")}><CircleHelp size={19} /></button></div>
       </header>
       {healthy === false && <div className="service-banner" role="status"><strong>Cannot connect to the service</strong><span>Check that the API is running, then try again.</span></div>}
